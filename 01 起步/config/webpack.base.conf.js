@@ -1,14 +1,15 @@
 const path = require('path');
+const paths = require('./paths');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // 自动在HTML文件中引入打包后的文件
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // 清除上一次的打包结果
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: ['@babel/polyfill', path.resolve(__dirname, '../src/main')],
+  entry: ['@babel/polyfill', path.resolve(__dirname, '../src/index.js')],
   output: {
     filename: '[name].[hash:8].js',
-    path: path.resolve(__dirname, '../dist')
+    path: paths.appBuild
   },
   plugins: [
     new HtmlWebpackPlugin ({
@@ -24,10 +25,14 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        include: paths.appSrc,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              '@babel/preset-env', 
+              '@babel/preset-react',
+            ],
           },
           // exclude: /node_modules/
         }
